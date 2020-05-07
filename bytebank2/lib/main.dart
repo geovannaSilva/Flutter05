@@ -1,16 +1,21 @@
 import 'package:bytebank2/components/transaction_auth_dialog.dart';
+import 'package:bytebank2/database/contact_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank2/screens/dashboard.dart';
 import 'package:uuid/uuid.dart';
 
 
 void main() {
-  runApp(Bytebank2());
-  print(Uuid().v4());
+  runApp(Bytebank2(contactDao: ContactDao()));
+//  print(Uuid().v4());
 }
 
 class Bytebank2 extends StatelessWidget {
-  // This widget is the root of your application.
+
+  final ContactDao contactDao;
+
+  Bytebank2({@required this.contactDao});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +27,7 @@ class Bytebank2 extends StatelessWidget {
               textTheme: ButtonTextTheme.primary,
             )
         ),
-      home: Dashboard(),
+      home: Dashboard(contactDao: contactDao),
     );
 
   }
