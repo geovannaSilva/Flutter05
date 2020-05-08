@@ -34,7 +34,8 @@ class ContactsList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final Contact contact = contacts[index];
                     return _ContactItem(contact, onClick: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
                         builder: (context) => TransactionForm(contact),
                       ));
                     });
@@ -50,7 +51,7 @@ class ContactsList extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ContactForm(),
+              builder: (context) => ContactForm(contactDao: contactDao,),
             ),
           );
         },
