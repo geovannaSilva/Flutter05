@@ -3,22 +3,26 @@ import 'package:bytebank2/database/contact_dao.dart';
 import 'package:bytebank2/models/contact.dart';
 import 'package:bytebank2/screens/contact_form.dart';
 import 'package:bytebank2/screens/transaction_form.dart';
+import 'package:bytebank2/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
-class ContactsList extends StatelessWidget {
-  final ContactDao contactDao;
-
-  ContactsList({@required this.contactDao});
+class ContactsList extends StatefulWidget {
 
   @override
+  _ContactsListState createState() => _ContactsListState();
+}
+
+class _ContactsListState extends State<ContactsList> {
+  @override
   Widget build(BuildContext context) {
+    final dependencies = AppDependencies.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Transfer'),
       ),
       body: FutureBuilder<List<Contact>>(
           initialData: List(),
-          future: contactDao.findAll(),
+          future: dependencies.contactDao.findAll(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
@@ -33,7 +37,7 @@ class ContactsList extends StatelessWidget {
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final Contact contact = contacts[index];
-                    return _ContactItem(contact, onClick: () {
+                    return ContactItem(contact, onClick: () {
                       Navigator.of(context).push(
                           MaterialPageRoute(
                         builder: (context) => TransactionForm(contact),
@@ -44,14 +48,13 @@ class ContactsList extends StatelessWidget {
                 );
                 break;
             }
-
             return Text('Unknown Error');
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ContactForm(contactDao: contactDao,),
+              builder: (context) => ContactForm(),
             ),
           );
         },
@@ -61,11 +64,11 @@ class ContactsList extends StatelessWidget {
   }
 }
 
-class _ContactItem extends StatelessWidget {
+class ContactItem extends StatelessWidget {
   final Contact contact;
   final Function onClick;
 
-  _ContactItem(
+  ContactItem(
     this.contact, {
     @required this.onClick,
   });
